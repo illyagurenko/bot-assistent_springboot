@@ -1,0 +1,32 @@
+spring:
+  #Настройки подключения к БД
+  datasource:
+    url: jdbc:postgresql://localhost:5433/bot_db
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    #Отключение автообновление Hibernate
+    hibernate:
+      ddl-auto: validate
+    show-sql: true #SQL логи
+    properties:
+      hibernate:
+        format_sql: true
+
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+
+bot:
+  name: ${BOT_NAME}
+  token: ${BOT_TOKEN}
+
+api:
+  gemini:
+    key: ${GEMINI_API_KEY}
+  opendota:
+    url: "https://api.opendota.com/api"
