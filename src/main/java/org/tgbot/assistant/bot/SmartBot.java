@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.tgbot.assistant.entity.User;
 import org.tgbot.assistant.service.UserService;
+import org.tgbot.assistant.service.handler.UpdateDispatcher;
 
 @Slf4j
 @Component
@@ -19,11 +20,11 @@ public class SmartBot extends TelegramLongPollingBot {
     @Value("${bot.name")
     private String botName;
 
-    private final UserService userService;
+    private final UpdateDispatcher updateDispatcher;
 
-    public SmartBot(@Value("${bot.token}") String botToken, UserService userService) {
+    public SmartBot(@Value("${bot.token}") String botToken, UpdateDispatcher updateDispatcher) {
         super(botToken);
-        this.userService = userService;
+        this.updateDispatcher = updateDispatcher;
     }
     @Override
     public String getBotUsername() {
@@ -32,22 +33,17 @@ public class SmartBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if(update.hasMessage() && update.getMessage().hasText()){
-            String messageText = update.getMessage().getText();
+        SendMessage sendMessage = updateDispatcher.distribute(update);
 
-            Long chatId = update.getMessage().getChatId();
-            String username = update.getMessage().getFrom().getUserName();
-
-            log.info("Получено сообщение: '{}' от пользователя: {}", messageText, username);
-
-            User user = userService.getOrCreateUser(chatId, username);
-            if ("/start".equals(messageText)) {
-                sendMessage(chatId, "Привет, " + user.getUsername() + "! Я твой умный ассистент. \n" +
-                        "Мой State в базе данных: " + user.getBotState());
-            } else {
-                sendMessage(chatId, "Ты сказал: " + messageText);
+        if(sendMessage != null){
+            try{
+                execute(sendMessage);
+            }
+            catch (TelegramApiException e){
+                log.error("Error sending message: {}", e.getMessage());
             }
         }
+
 
     }
 
