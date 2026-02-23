@@ -51,6 +51,14 @@ public class UpdateDispatcher {
         if("/schedule".equals(text)){
             return scheduleStartHandler.handle(message);
         }
+        if ("/ai".equals(text)) {
+            userService.updateBotState(chatId, BotState.WAITING_FOR_AI_QUESTION);
+            return new SendMessage(chatId.toString(), "Задавай любой вопрос нейросети Gemini:");
+        }
+        if ("/dota".equals(text)) {
+            userService.updateBotState(chatId, BotState.WAITING_FOR_DOTA_ID);
+            return new SendMessage(chatId.toString(), "Пришли свой Dota 2 Account ID (цифры):");
+        }
 
         BotState currentState = user.getBotState();
         InputMessageHandler handler = handlers.get(currentState);
