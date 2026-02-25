@@ -3,6 +3,8 @@ package org.tgbot.assistant.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+// Отображение таблицы в виде класса
+
 @Entity
 @Table(name = "users")
 @Getter
@@ -25,6 +27,7 @@ public class User {
     private String timezone;
 
     @Column(name = "bot_state")
+    // Аннотация, чтобы спринг сохранял enum не как числа
     @Enumerated(EnumType.STRING)
     private BotState botState;
 }

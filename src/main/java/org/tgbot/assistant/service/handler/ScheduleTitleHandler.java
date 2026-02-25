@@ -12,6 +12,8 @@ import org.tgbot.assistant.repository.UserRepository;
 import org.tgbot.assistant.service.UserCacheService;
 import org.tgbot.assistant.service.UserService;
 
+// Установка названия урока
+
 @Component
 @RequiredArgsConstructor
 public class ScheduleTitleHandler implements InputMessageHandler{
@@ -41,7 +43,7 @@ public class ScheduleTitleHandler implements InputMessageHandler{
 
         return new SendMessage(chatId.toString(), "Расписание сохранено. \nЯ напомню тебе о занятии '" + title + "' в " + draft.getTime());
     }
-
+    // Хендлер слушает сообщения только тогда, когда пользователь находится в состоянии WAITING_FOR_SCHEDULE_TITLE
     @Override
     public BotState getHandlerName() {
         return BotState.WAITING_FOR_SCHEDULE_TITLE;

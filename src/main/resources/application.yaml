@@ -26,7 +26,8 @@ bot:
   token: ${BOT_TOKEN}
 
 api:
-  gemini:
-    key: ${GEMINI_API_KEY}
+  ai:
+    key: ${OPENROUTER_API_KEY}
+    url: https://openrouter.ai/api/v1/chat/completions
   opendota:
     url: "https://api.opendota.com/api"

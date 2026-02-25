@@ -4,7 +4,7 @@ package org.tgbot.assistant.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-
+// Отображение таблицы в виде класса
 
 @Entity
 @Table(name = "dota_profiles")
@@ -18,6 +18,7 @@ public class DotaProfiles {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Один аккаунт для одного пользователя, также ленивая загрузка, как в schedule
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

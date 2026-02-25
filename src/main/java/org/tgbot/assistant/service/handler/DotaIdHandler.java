@@ -28,22 +28,29 @@ public class DotaIdHandler implements InputMessageHandler {
         Long chatId = message.getChatId();
 
         try {
+            // Проверяем, что юзер прислал именно число (ID аккаунта)
             Long dotaId = Long.parseLong(text);
 
+            //Идем в OpenDota, чтобы узнать, существует ли такой игрок
             DotaResponseDto stats = dotaService.getPlayerStats(dotaId);
 
+            // Если API вернуло пустоту или профиль скрыт/не существует
             if (stats == null || stats.getProfile() == null) {
-                return new SendMessage(chatId.toString(), "Игрок с таким ID не найден. Проверь цифры!");
+                return new SendMessage(chatId.toString(), "Игрок с таким ID не найден. Проверь цифры");
             }
 
+            //Привязываем ID к нашему пользователю
             User user = userRepository.findByTgId(chatId).orElseThrow();
+            // Пытаемся найти уже существующий профиль Доты для этого юзера
             DotaProfiles profile = dotaProfileRepository.findByUser(user)
                     .orElse(new DotaProfiles());
 
             profile.setUser(user);
             profile.setDotaAccountId(dotaId);
+            // Сохраняем (или обновляем) запись в таблице dota_profiles
             dotaProfileRepository.save(profile);
 
+            //Сбрасываем состояние пользователя в IDLE
             userService.updateBotState(chatId, BotState.IDLE);
 
             String response = String.format(
@@ -55,10 +62,10 @@ public class DotaIdHandler implements InputMessageHandler {
             return new SendMessage(chatId.toString(), response);
 
         } catch (NumberFormatException e) {
-            return new SendMessage(chatId.toString(), "ID должен состоять только из цифр!");
+            return new SendMessage(chatId.toString(), "ID должен состоять только из цифр");
         }
     }
-
+    // Хендлер слушает сообщения только тогда, когда пользователь находится в состоянии WAITING_FOR_DOTA_ID
     @Override
     public BotState getHandlerName() {
         return BotState.WAITING_FOR_DOTA_ID;

@@ -11,6 +11,8 @@ import org.tgbot.assistant.service.UserService;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 
+// Установка времени урока
+
 @Component
 @RequiredArgsConstructor
 public class ScheduleTimeHandler implements InputMessageHandler{
@@ -39,7 +41,7 @@ public class ScheduleTimeHandler implements InputMessageHandler{
         }
 
     }
-
+    // Хендлер слушает сообщения только тогда, когда пользователь находится в состоянии WAITING_FOR_SCHEDULE_TIME
     @Override
     public BotState getHandlerName() {
         return BotState.WAITING_FOR_SCHEDULE_TIME;

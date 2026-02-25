@@ -6,7 +6,12 @@ import org.tgbot.assistant.entity.DotaProfiles;
 import org.tgbot.assistant.entity.User;
 import java.util.Optional;
 
+/**
+ * Интерфейс служит мостом между кодом и таблицами
+ */
+
 @Repository
 public interface DotaProfilesRepository extends JpaRepository<DotaProfiles, Long> {
+    // Поиск DotaProfiles по юзеру
     Optional<DotaProfiles> findByUser(User user);
 }

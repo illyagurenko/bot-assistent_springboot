@@ -25,6 +25,22 @@ services:
       - "5050:80"
     depends_on:
       - postgres
-
+  bot-app:
+    build: . # Собирать образ из текущей папки (Dockerfile)
+    container_name: smart-assistant-bot
+    depends_on:
+      - postgres # Ждать запуска базы
+    environment:
+      # Передаем все ключи прямо в контейнер
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/bot_db
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USER}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - BOT_NAME=${BOT_NAME}
+      - BOT_TOKEN=${BOT_TOKEN}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
 volumes:
   postgres-data:
+
+
+
+

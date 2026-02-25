@@ -7,6 +7,8 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.tgbot.assistant.entity.BotState;
 import org.tgbot.assistant.service.UserService;
 
+// Добавление урока в расписание
+
 @Component
 @RequiredArgsConstructor
 public class ScheduleStartHandler implements InputMessageHandler {
